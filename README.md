@@ -1,27 +1,40 @@
-# Node CRUD API + MySQL + React
+# Node CRUD API + MySQL
 
-API REST de usuários (CRUD) com **Node.js**, **Express** e **MySQL**. Base de estudo e demonstração de boas práticas backend.
+API REST de usuários (CRUD) com **Node.js**, **Express** e **MySQL**. Estudo de backend com rotas, controller e pool de conexões.
 
-> Autor: [Thomas Eduardo](https://thomaseduardo.com.br)  
-> Repositório sugerido (renomear no GitHub): `node-crud-api-mysql`
+Autor: [Thomas Eduardo](https://thomaseduardo.com.br) · [GitHub](https://github.com/devthomaseduardo/NodeCrude-Api-Mysql-React)
 
----
+> Nome sugerido no GitHub: `node-crud-api-mysql`
 
-## Stack
+## Propósito
 
-- Node.js · Express · MySQL2 · dotenv · CORS
+- Exercitar CRUD REST e MySQL2.
+- Separar config, rotas e controllers.
 
-## Endpoints
+## Funcionalidades
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| `POST` | `/api/usuarios` | Criar usuário |
+| `POST` | `/api/usuarios` | Criar |
 | `GET` | `/api/usuarios` | Listar |
-| `GET` | `/api/usuarios/:id` | Buscar por ID |
+| `GET` | `/api/usuarios/:id` | Buscar |
 | `PUT` | `/api/usuarios/:id` | Atualizar |
 | `DELETE` | `/api/usuarios/:id` | Remover |
 
-## Setup
+## Stack
+
+| Camada | Tecnologia |
+|--------|------------|
+| Runtime | **Node.js** |
+| Framework | **Express** |
+| Banco | **MySQL** (mysql2) |
+
+## Requisitos
+
+- Node.js 18+
+- MySQL com database `nodemysql` e tabela `usuarios`
+
+## Instalação
 
 ```bash
 git clone https://github.com/devthomaseduardo/NodeCrude-Api-Mysql-React.git
@@ -29,32 +42,10 @@ cd NodeCrude-Api-Mysql-React
 npm install
 ```
 
-MySQL:
-
-```sql
-CREATE DATABASE nodemysql;
-USE nodemysql;
-CREATE TABLE usuarios (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nome VARCHAR(100) NOT NULL,
-  email VARCHAR(100) NOT NULL UNIQUE,
-  password VARCHAR(100) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-`.env`:
-
-```env
-DB_HOST=localhost
-DB_USER=seu_usuario
-DB_PASS=sua_senha
-DB_NAME=nodemysql
-PORT=8800
-```
+`.env`: `DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`, `PORT`.
 
 ```bash
-npm run dev   # ou npm start
+npm run dev
 ```
 
 ## Licença
