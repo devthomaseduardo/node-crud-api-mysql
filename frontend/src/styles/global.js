@@ -1,20 +1,29 @@
 import { createGlobalStyle } from "styled-components";
 
-const Global = createGlobalStyle`
-
+const GlobalStyle = createGlobalStyle`
   * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'poppins', sans-serif;
   }
-  
+
+  html {
+    background: #f5f7fb;
+  }
+
   body {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    background-color: #f2f2f2;
+    min-width: 320px;
+    min-height: 100vh;
+    background: #f5f7fb;
+    color: #111827;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  input {
+    font: inherit;
   }
 `;
 
-export default Global;
+export default GlobalStyle;

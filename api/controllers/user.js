@@ -1,57 +1,67 @@
 import { db } from "../db.js";
 
+const fields = ["nome", "email", "fone", "data_nascimento"];
+
+const getValues = (body) => fields.map((field) => body[field]?.toString().trim());
+
+const validateUser = (values) => values.every(Boolean);
+
 export const getUsers = (_, res) => {
-  const q = "SELECT * FROM usuarios";
+  const query = "SELECT * FROM usuarios ORDER BY nome ASC";
 
-  db.query(q, (err, data) => {
-    if (err) return res.json(err);
-
+  db.query(query, (err, data) => {
+    if (err) return res.status(500).json({ message: "Erro ao buscar usuários." });
     return res.status(200).json(data);
   });
 };
 
+export const getUserById = (req, res) => {
+  const query = "SELECT * FROM usuarios WHERE id = ? LIMIT 1";
+
+  db.query(query, [req.params.id], (err, data) => {
+    if (err) return res.status(500).json({ message: "Erro ao buscar usuário." });
+    if (!data.length) return res.status(404).json({ message: "Usuário não encontrado." });
+    return res.status(200).json(data[0]);
+  });
+};
+
 export const addUser = (req, res) => {
-  const q =
-    "INSERT INTO usuarios(`nome`, `email`, `fone`, `data_nascimento`) VALUES(?)";
+  const values = getValues(req.body);
 
-  const values = [
-    req.body.nome,
-    req.body.email,
-    req.body.fone,
-    req.body.data_nascimento,
-  ];
+  if (!validateUser(values)) {
+    return res.status(400).json({ message: "Preencha todos os campos." });
+  }
 
-  db.query(q, [values], (err) => {
-    if (err) return res.json(err);
+  const query = "INSERT INTO usuarios (`nome`, `email`, `fone`, `data_nascimento`) VALUES (?)";
 
-    return res.status(200).json("Usuário criado com sucesso.");
+  db.query(query, [values], (err, data) => {
+    if (err) return res.status(500).json({ message: "Erro ao criar usuário." });
+    return res.status(201).json({ message: "Usuário criado com sucesso.", id: data.insertId });
   });
 };
 
 export const updateUser = (req, res) => {
-  const q =
-    "UPDATE usuarios SET `nome` = ?, `email` = ?, `fone` = ?, `data_nascimento` = ? WHERE `id` = ?";
+  const values = getValues(req.body);
 
-  const values = [
-    req.body.nome,
-    req.body.email,
-    req.body.fone,
-    req.body.data_nascimento,
-  ];
+  if (!validateUser(values)) {
+    return res.status(400).json({ message: "Preencha todos os campos." });
+  }
 
-  db.query(q, [...values, req.params.id], (err) => {
-    if (err) return res.json(err);
+  const query = "UPDATE usuarios SET `nome` = ?, `email` = ?, `fone` = ?, `data_nascimento` = ? WHERE `id` = ?";
 
-    return res.status(200).json("Usuário atualizado com sucesso.");
+  db.query(query, [...values, req.params.id], (err, data) => {
+    if (err) return res.status(500).json({ message: "Erro ao atualizar usuário." });
+    if (!data.affectedRows) return res.status(404).json({ message: "Usuário não encontrado." });
+    return res.status(200).json({ message: "Usuário atualizado com sucesso." });
   });
 };
 
 export const deleteUser = (req, res) => {
-  const q = "DELETE FROM usuarios WHERE `id` = ?";
+  const query = "DELETE FROM usuarios WHERE `id` = ?";
 
-  db.query(q, [req.params.id], (err) => {
-    if (err) return res.json(err);
-
-    return res.status(200).json("Usuário deletado com sucesso.");
+  db.query(query, [req.params.id], (err, data) => {
+    if (err) return res.status(500).json({ message: "Erro ao excluir usuário." });
+    if (!data.affectedRows) return res.status(404).json({ message: "Usuário não encontrado." });
+    return res.status(200).json({ message: "Usuário excluído com sucesso." });
   });
 };
