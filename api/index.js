@@ -1,39 +1,23 @@
-// No seu arquivo index.js
-import express from 'express';
-import cors from 'cors';
-import { db } from './db.js';
+import express from "express";
+import cors from "cors";
+import userRoutes from "./routes/user.js";
 
 const app = express();
+const PORT = process.env.PORT || 8800;
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// Listar todos os usuários
-app.get('/usuarios', (req, res) => {
-  const q = 'SELECT * FROM usuarios';
-  db.query(q, (err, data) => {
-    if (err) return res.json(err);
-    return res.json(data);
-  });
+app.get("/api/health", (_, res) => {
+  return res.status(200).json({ status: "ok" });
 });
 
-// Criar usuário
-app.post('/usuarios', (req, res) => {
-  const q =
-    'INSERT INTO usuarios (`nome`, `email`, `fone`, `data_nascimento`) VALUES (?)';
-  const values = [
-    req.body.nome,
-    req.body.email,
-    req.body.fone,
-    req.body.data_nascimento,
-  ];
+app.use("/api/usuarios", userRoutes);
 
-  db.query(q, [values], (err, data) => {
-    if (err) return res.json(err);
-    return res.json('Usuário criado com sucesso.');
-  });
+app.use((_, res) => {
+  return res.status(404).json({ message: "Rota não encontrada." });
 });
 
-app.listen(8800, () => {
-  console.log('Servidor rodando na porta 8800');
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
