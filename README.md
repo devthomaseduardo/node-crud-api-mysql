@@ -102,4 +102,8 @@ frontend-vite/     # alternativa Vite
 
 ## Licença
 
-MIT © Thomas Eduardo
+**Software proprietário.** Todos os direitos reservados.
+
+Ver [LICENSE](LICENSE). Uso, cópia, modificação ou distribuição sem autorização escrita prévia é proibido.
+
+Contato: [thomaseduardo.com.br](https://thomaseduardo.com.br)
